@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PhotosUI
 
 class ViewController: UIViewController {
 
@@ -31,11 +32,19 @@ class ViewController: UIViewController {
         photoItem.tintColor = .black.withAlphaComponent(0.7)
         self.navigationItem.rightBarButtonItem = photoItem
         
-        let refreshItem = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"), style: .done, target: self, action: #selector(showGallery))
+        let refreshItem = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"), style: .done, target: self, action: #selector(showGallery))
         self.navigationItem.leftBarButtonItem = refreshItem
     }
     
     @objc func showGallery() {
+        let libray = PHPhotoLibrary.shared()
+        var configuration = PHPickerConfiguration(photoLibrary: libray)
+        configuration.selectionLimit = 10
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true)
+        
         
     }
 
@@ -57,6 +66,15 @@ extension ViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath)
         
         return cell
+    }
+    
+    
+}
+
+extension ViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        
+        self.dismiss(animated: true)
     }
     
     
