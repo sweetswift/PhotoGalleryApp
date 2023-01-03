@@ -10,6 +10,10 @@ import PhotosUI
 
 class ViewController: UIViewController {
     
+
+
+    var fetcResults: PHFetchResult<PHAsset>?
+    
     @IBOutlet weak var photoCollectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,14 +99,19 @@ class ViewController: UIViewController {
 extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return self.fetcResults?.count ?? 0
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
         
+        if let asset = self.fetcResults?[indexPath.row] {
+            cell.loadImage(asset: asset)
+            
+        }
+      
         return cell
     }
     
@@ -111,6 +120,15 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        
+      
+        let identifiers = results.map{
+            $0.assetIdentifier ?? ""
+        }
+            
+        self.fetcResults = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+        self.photoCollectionView.reloadData()
+      
         
         self.dismiss(animated: true)
     }
