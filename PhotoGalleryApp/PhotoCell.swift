@@ -22,7 +22,10 @@ class PhotoCell: UICollectionViewCell {
         let scale = UIScreen.main.scale
         let imageSize = CGSize(width: 150 * scale, height: 150 * scale)
         
-        imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: nil) { image, info in
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        
+        imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: options) { image, info in
             self.photoImageView.image = image
         
         }
