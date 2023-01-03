@@ -36,7 +36,7 @@ class ViewController: UIViewController {
         photoItem.tintColor = .black.withAlphaComponent(0.7)
         self.navigationItem.rightBarButtonItem = photoItem
         
-        let refreshItem = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"), style: .done, target: self, action: #selector(checkPermission))
+        let refreshItem = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"), style: .done, target: self, action: #selector(refresh))
         self.navigationItem.leftBarButtonItem = refreshItem
     }
     
@@ -91,7 +91,7 @@ class ViewController: UIViewController {
     }
     
     @objc func refresh() {
-        
+        self.photoCollectionView.reloadData()
     }
     
 }
